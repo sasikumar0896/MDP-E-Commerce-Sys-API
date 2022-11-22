@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd">
+	<sub-flow name="mdp-e-commerce-sys-api-get-flow" doc:id="b6d98d56-2a15-4a3a-b79c-8f628d2b5247">
+        <json-logger:logger doc:name="Start Log" doc:id="67a52482-d737-445b-a649-e6c44ca90063" config-ref="JSON_Logger_Config" message="get data flow started"/>
+		<ee:transform doc:name="Transform Message" doc:id="18e5f259-347e-4d6d-8ba9-20fc452060bd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <db:select doc:name="Select" doc:id="8a9821ed-d2c2-434a-ade8-82d733c9ddab" config-ref="Database_Config1">
+            <db:sql><![CDATA[Select * from orders where order_id = :order_id;]]></db:sql>
+            <db:input-parameters><![CDATA[#[{
+	order_id: payload.order_id
+}]]]></db:input-parameters>
+        </db:select>
+		<json-logger:logger doc:name="End Log" doc:id="927e6c8b-6b9b-4edd-a588-048aedd08a10" config-ref="JSON_Logger_Config" message="get data flow ended" tracePoint="END"/>
+    
+</sub-flow>
+	</mule>

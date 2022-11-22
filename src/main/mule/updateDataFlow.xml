@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<sub-flow name="updateDataFlowSub_Flow" doc:id="d73c65a3-b9b7-46be-af1d-ab1590744f74" >
+		<json-logger:logger doc:name="Start Log" doc:id="222284c5-db1e-40cf-8ca7-1107b7bb9302" config-ref="JSON_Logger_Config" message="update data flow started"/>
+		<db:update doc:name="Update" doc:id="8c0f4e1c-f9ca-46a9-b42e-19d05c84f643" config-ref="Database_Config1">
+			<db:sql ><![CDATA[update orders 
+set product = :product, order_type = :order_type
+where order-id = :order-id]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+'order-id' : payload.order-id,
+'product' : payload.product,
+'order_type'  : payload.order_type
+}]]]></db:input-parameters>
+		</db:update>
+		<json-logger:logger doc:name="End Log" doc:id="fc5648c7-c639-40ba-97fa-ad062dc6d2ea" config-ref="JSON_Logger_Config" message="update data flow ended" tracePoint="END"/>
+	</sub-flow>
+</mule>
