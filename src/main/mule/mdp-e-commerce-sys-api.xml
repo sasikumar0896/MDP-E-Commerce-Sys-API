@@ -5,10 +5,8 @@
     </http:listener-config>
     <apikit:config name="mdp-e-commerce-sys-api-config" api="mdp-e-commerce-sys-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <json-logger:config name="JSON_Logger_Config" doc:name="JSON Logger Config" doc:id="580929ac-2ae3-4e84-923c-8941142edb3e" environment="${env}" />
-    <db:config name="Database_Config1" doc:name="Database Config" doc:id="6f58fd2d-4c38-428e-8385-5ba75ba26fe2">
-        <db:generic-connection url="jdbc:postgresql://arjuna.db.elephantsql.com/kpwmtocy?sslmode=require" driverClassName="org.postgresql.Driver" user="kpwmtocy" password="HwUZlxoYGc0qV1c7SNNoGRrSDWZ8E-Fb" />
-    </db:config>
-    <configuration-properties doc:name="Configuration properties" doc:id="7cf15dfd-2449-4d97-9db9-94c0cb04d9da" file="properties\mule.sb.properties" />
+    
+    
 	<flow name="mdp-e-commerce-sys-api-main">
         <http:listener config-ref="mdp-e-commerce-sys-api-httpListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
