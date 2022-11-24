@@ -18,86 +18,7 @@
             </http:error-response>
         </http:listener>
         <apikit:router config-ref="mdp-e-commerce-sys-api-config" />
-        <error-handler>
-            <on-error-propagate type="APIKIT:BAD_REQUEST">
-                <ee:transform>
-                    <ee:message>
-                        <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{message: "Bad request"}]]></ee:set-payload>
-                    </ee:message>
-                    <ee:variables>
-                        <ee:set-variable variableName="httpStatus">400</ee:set-variable>
-                    </ee:variables>
-                </ee:transform>
-            </on-error-propagate>
-            <on-error-propagate type="APIKIT:NOT_FOUND">
-                <ee:transform>
-                    <ee:message>
-                        <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{message: "Resource not found"}]]></ee:set-payload>
-                    </ee:message>
-                    <ee:variables>
-                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
-                    </ee:variables>
-                </ee:transform>
-            </on-error-propagate>
-            <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
-                <ee:transform>
-                    <ee:message>
-                        <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{message: "Method not allowed"}]]></ee:set-payload>
-                    </ee:message>
-                    <ee:variables>
-                        <ee:set-variable variableName="httpStatus">405</ee:set-variable>
-                    </ee:variables>
-                </ee:transform>
-            </on-error-propagate>
-            <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
-                <ee:transform>
-                    <ee:message>
-                        <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{message: "Not acceptable"}]]></ee:set-payload>
-                    </ee:message>
-                    <ee:variables>
-                        <ee:set-variable variableName="httpStatus">406</ee:set-variable>
-                    </ee:variables>
-                </ee:transform>
-            </on-error-propagate>
-            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
-                <ee:transform>
-                    <ee:message>
-                        <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{message: "Unsupported media type"}]]></ee:set-payload>
-                    </ee:message>
-                    <ee:variables>
-                        <ee:set-variable variableName="httpStatus">415</ee:set-variable>
-                    </ee:variables>
-                </ee:transform>
-            </on-error-propagate>
-            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
-                <ee:transform>
-                    <ee:message>
-                        <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{message: "Not Implemented"}]]></ee:set-payload>
-                    </ee:message>
-                    <ee:variables>
-                        <ee:set-variable variableName="httpStatus">501</ee:set-variable>
-                    </ee:variables>
-                </ee:transform>
-            </on-error-propagate>
-        </error-handler>
+		<error-handler ref="comon-error-handler" />
     </flow>
     <flow name="mdp-e-commerce-sys-api-console">
         <http:listener config-ref="mdp-e-commerce-sys-api-httpListenerConfig" path="/console/*">
@@ -110,21 +31,7 @@ output application/json
             </http:error-response>
         </http:listener>
         <apikit:console config-ref="mdp-e-commerce-sys-api-config" />
-        <error-handler>
-            <on-error-propagate type="APIKIT:NOT_FOUND">
-                <ee:transform>
-                    <ee:message>
-                        <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{message: "Resource not found"}]]></ee:set-payload>
-                    </ee:message>
-                    <ee:variables>
-                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
-                    </ee:variables>
-                </ee:transform>
-            </on-error-propagate>
-        </error-handler>
+		<error-handler ref="comon-error-handler" />
     </flow>
     <flow name="put:\update:application\json:mdp-e-commerce-sys-api-config">
         <json-logger:logger doc:name="Start Log" doc:id="0324dfff-c8ba-43a1-89d5-fb91ce3b20be" config-ref="JSON_Logger_Config" message="update data flow started" />
@@ -141,19 +48,6 @@ output application/json
         </ee:transform>
         <json-logger:logger doc:name="End Log" doc:id="a932d0fe-c4d7-4958-8441-2d1ab3b4bc8e" config-ref="JSON_Logger_Config" message="update data flow ended" />
     </flow>
-    <flow name="delete:\delete:application\json:mdp-e-commerce-sys-api-config">
-        <flow-ref doc:name="Flow Reference" doc:id="c97e3fdc-4969-4ce6-961f-30350c42fd0c" name="deleteDataFlowSub_Flow"/>
-		<ee:transform>
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  message: "Data deleted successfully"
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
-    </flow>
     <flow name="get:\select:mdp-e-commerce-sys-api-config">
         <flow-ref doc:name="Flow Reference" doc:id="3ea2c68c-c11c-4c4d-b448-1c0e3ad7f92e" name="mdp-e-commerce-sys-api-get-flow"/>
 		<ee:transform>
@@ -167,7 +61,7 @@ output application/json
             </ee:message>
         </ee:transform>
     </flow>
-    <flow name="post:\create:application\json:mdp-e-commerce-sys-api-config">
+    <flow name="post:\createOrders:application\json:mdp-e-commerce-sys-api-config">
         <json-logger:logger doc:name="Start Log" doc:id="356cf7b9-7ed7-47aa-9498-203360e26913" config-ref="JSON_Logger_Config" message="create data flow started" />
         <flow-ref doc:name="Flow Reference" doc:id="90e3bd1f-f619-44e6-a486-ca2166272082" name="mdp-e-commerce-sys-api-post-data-flow"/>
 		<ee:transform>
