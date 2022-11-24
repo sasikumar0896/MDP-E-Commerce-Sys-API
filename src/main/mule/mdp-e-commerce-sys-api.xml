@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd  http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd">
     <http:listener-config name="mdp-e-commerce-sys-api-httpListenerConfig">
-        <http:listener-connection host="${https.listener.host}" port="${https.listener.port}" readTimeout="${https.listener.timeout}"/>
+        <http:listener-connection host="${https.listener.host}" port="${https.listener.port}" readTimeout="${https.listener.timeout}" />
     </http:listener-config>
     <apikit:config name="mdp-e-commerce-sys-api-config" api="mdp-e-commerce-sys-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <json-logger:config name="JSON_Logger_Config" doc:name="JSON Logger Config" doc:id="580929ac-2ae3-4e84-923c-8941142edb3e" environment="${env}" />
-    
-    
-	<flow name="mdp-e-commerce-sys-api-main">
+    <flow name="mdp-e-commerce-sys-api-main">
         <http:listener config-ref="mdp-e-commerce-sys-api-httpListenerConfig" path="${https.listener.path}">
             <http:response statusCode="#[vars.httpStatus default 200]">
                 <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
@@ -18,7 +16,7 @@
             </http:error-response>
         </http:listener>
         <apikit:router config-ref="mdp-e-commerce-sys-api-config" />
-		<error-handler ref="comon-error-handler" />
+        <error-handler ref="comon-error-handler" />
     </flow>
     <flow name="mdp-e-commerce-sys-api-console">
         <http:listener config-ref="mdp-e-commerce-sys-api-httpListenerConfig" path="/console/*">
@@ -31,12 +29,12 @@
             </http:error-response>
         </http:listener>
         <apikit:console config-ref="mdp-e-commerce-sys-api-config" />
-		<error-handler ref="comon-error-handler" />
+        <error-handler ref="comon-error-handler" />
     </flow>
     <flow name="put:\update:application\json:mdp-e-commerce-sys-api-config">
         <json-logger:logger doc:name="Start Log" doc:id="0324dfff-c8ba-43a1-89d5-fb91ce3b20be" config-ref="JSON_Logger_Config" message="update data flow started" />
-		<flow-ref doc:name="Flow Reference" doc:id="a01d779a-fc0b-43ed-8f6f-76644f8eb82e" name="updateDataFlowSub_Flow"/>
-		<ee:transform>
+        <flow-ref doc:name="Flow Reference" doc:id="a01d779a-fc0b-43ed-8f6f-76644f8eb82e" name="updateDataFlowSub_Flow" />
+        <ee:transform>
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -49,8 +47,8 @@ output application/json
         <json-logger:logger doc:name="End Log" doc:id="a932d0fe-c4d7-4958-8441-2d1ab3b4bc8e" config-ref="JSON_Logger_Config" message="update data flow ended" />
     </flow>
     <flow name="get:\select:mdp-e-commerce-sys-api-config">
-        <flow-ref doc:name="Flow Reference" doc:id="3ea2c68c-c11c-4c4d-b448-1c0e3ad7f92e" name="mdp-e-commerce-sys-api-get-flow"/>
-		<ee:transform>
+        <flow-ref doc:name="Flow Reference" doc:id="3ea2c68c-c11c-4c4d-b448-1c0e3ad7f92e" name="mdp-e-commerce-sys-api-get-flow" />
+        <ee:transform>
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -63,8 +61,8 @@ output application/json
     </flow>
     <flow name="post:\createOrders:application\json:mdp-e-commerce-sys-api-config">
         <json-logger:logger doc:name="Start Log" doc:id="356cf7b9-7ed7-47aa-9498-203360e26913" config-ref="JSON_Logger_Config" message="create data flow started" />
-        <flow-ref doc:name="Flow Reference" doc:id="90e3bd1f-f619-44e6-a486-ca2166272082" name="mdp-e-commerce-sys-api-post-data-flow"/>
-		<ee:transform>
+        <flow-ref doc:name="Flow Reference" doc:id="90e3bd1f-f619-44e6-a486-ca2166272082" name="mdp-e-commerce-sys-api-post-data-flow" />
+        <ee:transform>
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -76,6 +74,4 @@ output application/json
         </ee:transform>
         <json-logger:logger doc:name="End Log" doc:id="aaa71515-7728-4a9b-88f6-543e92eae2a8" config-ref="JSON_Logger_Config" message="create data flow ended" tracePoint="END" />
     </flow>
-    
-    
 </mule>
