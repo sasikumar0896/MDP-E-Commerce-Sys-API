@@ -10,9 +10,8 @@ http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/cu
 		<db:update doc:name="Update" doc:id="8c0f4e1c-f9ca-46a9-b42e-19d05c84f643" config-ref="Database_Config1">
 			<db:sql ><![CDATA[update orders 
 set product = :product, order_type = :order_type
-where order-id = :order-id]]></db:sql>
+where order_id = :order_id]]></db:sql>
 			<db:input-parameters ><![CDATA[#[{
-'order-id' : payload.order-id,
 'product' : payload.product,
 'order_type'  : payload.order_type
 }]]]></db:input-parameters>

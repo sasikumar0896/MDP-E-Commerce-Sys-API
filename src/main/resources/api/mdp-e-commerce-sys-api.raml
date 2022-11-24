@@ -27,6 +27,7 @@ protocols:
           application/json:
             example: !include library-responses/200-fetch-responselibrary.raml
 /update:
+  /{order_id}:
   put:
     description: To update the data in table
     body:
