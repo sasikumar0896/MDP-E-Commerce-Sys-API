@@ -12,6 +12,7 @@ http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/cu
 set product = :product, order_type = :order_type
 where order_id = :order_id]]></db:sql>
 			<db:input-parameters ><![CDATA[#[{
+'order_id': payload.order_id,
 'product' : payload.product,
 'order_type'  : payload.order_type
 }]]]></db:input-parameters>

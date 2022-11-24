@@ -19,6 +19,7 @@ protocols:
             example: !include library-responses/200response-library.raml
 
 /select:
+  /{order_id}:
   get:
     description: To fetch the data from table
     responses:
@@ -38,14 +39,3 @@ protocols:
         body:
           application/json:
             example : !include library-responses/200-update-responselibrary.raml
-/delete:
-  delete:
-    description: To delete or remove the data in db
-    body:
-      application/json:
-        example: !include dataTypes/createData.raml
-    responses:
-      200:
-        body:
-          application/json:
-            example: !include library-responses/200-delete-responselibrary.raml

@@ -10,10 +10,11 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd">
 	<sub-flow name="mdp-e-commerce-sys-api-get-flow" doc:id="b6d98d56-2a15-4a3a-b79c-8f628d2b5247">
         <json-logger:logger doc:name="Start Log" doc:id="67a52482-d737-445b-a649-e6c44ca90063" config-ref="JSON_Logger_Config" message="get data flow started"/>
-        <db:select doc:name="Select" doc:id="8a9821ed-d2c2-434a-ade8-82d733c9ddab" config-ref="Database_Config1">
-            <db:sql><![CDATA[Select * from orders;]]></db:sql>
+        <set-variable value="#[attributes.queryParams.order_id]" doc:name="Set Variable" doc:id="f86ef719-3532-4d62-bc7e-3eeef51249fc" variableName="ord_id"/>
+		<db:select doc:name="Select" doc:id="8a9821ed-d2c2-434a-ade8-82d733c9ddab" config-ref="Database_Config1">
+            <db:sql><![CDATA[Select * from orders where order_id=:orderid;]]></db:sql>
             <db:input-parameters><![CDATA[#[{
-	order_id: payload.order_id
+	orderid: vars.ord_id
 }]]]></db:input-parameters>
         </db:select>
 		<json-logger:logger doc:name="End Log" doc:id="927e6c8b-6b9b-4edd-a588-048aedd08a10" config-ref="JSON_Logger_Config" message="get data flow ended" tracePoint="END"/>
