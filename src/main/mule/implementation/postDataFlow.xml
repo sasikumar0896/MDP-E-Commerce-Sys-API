@@ -10,10 +10,8 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd">
 	<sub-flow name="mdp-e-commerce-sys-api-post-data-flow" doc:id="b4a86de1-4137-4b05-b73c-709e8a28ba1b">
         <json-logger:logger doc:name="Start Log" doc:id="aa5da18f-80b1-4156-b1b8-23d44650de0f" config-ref="JSON_Logger_Config" message="post data flow started"/>
-        <db:insert doc:name="Insert" doc:id="f10c8484-3f81-488a-9746-17c13255b587" config-ref="Database_Config1">
-            <db:sql><![CDATA[insert into orders(order_id, customer_name, product, customer_address, customer_contact, order_type, regionOfSale, orderValue)
-values(:order_id, :customer_name, :product, :customer_address, :customer_contact, :order_type, :regionOfSale, :orderValue)]]></db:sql>
-            <db:input-parameters><![CDATA[#[{
+		<db:bulk-insert doc:name="Bulk insert" doc:id="57e46f5b-c7d5-46f2-ae72-cf22c45c399e" config-ref="Database_Config1">
+			<db:bulk-input-parameters ><![CDATA[#[{
 	order_id: payload.order_id,
 	customer_name: payload.customer_name,
 	product: payload.product,
@@ -23,8 +21,10 @@ values(:order_id, :customer_name, :product, :customer_address, :customer_contact
 	regionOfSale: payload.regionOfSale,
 	orderValue: payload.orderValue
 	
-}]]]></db:input-parameters>
-        </db:insert>
+}]]]></db:bulk-input-parameters>
+			<db:sql ><![CDATA[insert into orders(order_id, customer_name, product, customer_address, customer_contact, order_type, regionOfSale, orderValue)
+values(:order_id, :customer_name, :product, :customer_address, :customer_contact, :order_type, :regionOfSale, :orderValue)]]></db:sql>
+		</db:bulk-insert>
 		<json-logger:logger doc:name="End Log" doc:id="da532a32-d556-47d9-bb9e-d97256044e28" config-ref="JSON_Logger_Config" message="post data flow ended" tracePoint="END"/>
     
 </sub-flow>
